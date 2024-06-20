@@ -25,6 +25,7 @@ const Navbar = () => {
                 <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                     <Button color="inherit" component={Link} href="/">Home</Button>
                     <Button color="inherit" component={Link} href="/rooms">Rooms</Button>
+                    <Button color="inherit" component={Link} href="/bookings">Bookings</Button>
                     <Button color="inherit" component={Link} href="/about">About</Button>
 
                     <Button color="inherit" component={Link} href="/login">Login</Button>
@@ -45,6 +46,7 @@ const Navbar = () => {
                     >
                         <MenuItem onClick={handleClose} component={Link} href="/">Home</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} href="/rooms">Rooms</MenuItem>
+                        <MenuItem onClick={handleClose} component={Link} href="/bookings">Bookings</MenuItem>
                         <MenuItem onClick={handleClose} component={Link} href="/about">About</MenuItem>
 
                         <MenuItem onClick={handleClose} component={Link} href="/login">Login</MenuItem>
