@@ -16,7 +16,7 @@ const RoomsPage = () => {
         const fetchProductData = async () => {
             try {
 
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}api/rooms`)
+                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/rooms`)
                 if (!data.success) {
                     throw new Error(data.error)
                 }
@@ -125,6 +125,7 @@ const RoomsPage = () => {
                                         slug={room.slug}
                                         capacity={room.capacity}
                                         price={room.price}
+                                        id={room._id}
                                         onBook={() => handleBook(room._id)}
                                     />
                                 </Grid>
@@ -144,6 +145,7 @@ const RoomsPage = () => {
                                         beds={room.beds}
                                         capacity={room.capacity}
                                         price={room.price}
+                                        id={room._id}
                                         onBook={() => handleBook(room._id)}
                                     />
                                 </Grid>
