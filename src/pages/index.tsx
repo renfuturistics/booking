@@ -73,7 +73,7 @@ const HomePage = () => {
               <Typography variant="body1" component="p" mt={1}>
                 Enjoy privacy and personal space.
               </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }}>View Details</Button>
+             
             </Paper>
           </Grid>
           
@@ -95,7 +95,7 @@ const HomePage = () => {
               <Typography variant="body1" component="p" mt={1}>
                 Share a room with a fellow student.
               </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }}>View Details</Button>
+             
             </Paper>
           </Grid>
           
@@ -117,7 +117,7 @@ const HomePage = () => {
               <Typography variant="body1" component="p" mt={1}>
                 Enjoy more space and amenities.
               </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }}>View Details</Button>
+             
             </Paper>
           </Grid>
         </Grid>

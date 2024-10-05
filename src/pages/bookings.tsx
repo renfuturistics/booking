@@ -59,6 +59,7 @@ const BookedRoomsPage = () => {
                                     description={room.room.description}
                                     size={room.room.size}
                                     slug=''
+                                    id={room._id}
                                     beds={room.room.beds}
                                     capacity={room.room.capacity}
                                     price={room.room.price}

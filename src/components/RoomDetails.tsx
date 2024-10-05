@@ -11,7 +11,7 @@ interface RoomDetailsProps {
     capacity: number;
     price: string;
     amenities?: string[];  // Optional amenities list
-    onBook?: () => void;   // Optional book button
+    onBook?: () => void;   // Optional book button handler
 }
 
 const RoomDetails: React.FC<RoomDetailsProps> = ({
@@ -22,13 +22,37 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
     beds,
     capacity,
     price,
-    amenities = ['Wi-Fi', 'Private Bathroom', 'Kitchen', 'Parking'], // Default amenities
+    amenities = ['Wi-Fi', 'Bathroom', 'Kitchen'], // Default amenities
     onBook,
 }) => {
+    // Function to get corresponding icons for each amenity
+    const getAmenityIcon = (amenity: string) => {
+        switch (amenity) {
+            case 'Wi-Fi':
+                return <Wifi />;
+            case 'Kitchen':
+                return <Kitchen />;
+            case 'Private Bathroom':
+                return <Bathtub />;
+       
+            default:
+                return <CheckCircleOutline />;
+        }
+    };
+
     return (
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ mt: 4 }}>
             {/* Room Image */}
-            <img src={imageUrl} alt={title} style={{ width: '100%', maxWidth: '800px', borderRadius: '12px', boxShadow: '0 8px 16px rgba(0,0,0,0.1)' }} />
+            <img 
+                src={imageUrl} 
+                alt={title} 
+                style={{
+                    width: '100%', 
+                    maxWidth: '800px', 
+                    borderRadius: '12px', 
+                    boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+                }} 
+            />
             
             <Box mt={4} maxWidth="800px" sx={{ textAlign: 'left' }}>
                 {/* Room Title */}
@@ -44,20 +68,36 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
                 <Divider sx={{ my: 2 }} />
 
                 {/* Room Specifications */}
-                <Grid container spacing={2} sx={{ mb: 2 }}>
-                    <Grid item xs={6} sm={4}>
-                        <Typography variant="body2" color="text.primary"><strong>Size:</strong> {size}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <Typography variant="body2" color="text.primary"><strong>Beds:</strong> {beds}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <Typography variant="body2" color="text.primary"><strong>Capacity:</strong> {capacity}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <Typography variant="body2" color="text.primary"><strong>Price:</strong> {price}</Typography>
-                    </Grid>
-                </Grid>
+                <Grid container spacing={2} sx={{ mb: 4 }}>
+  <Grid item xs={12} sm={6} md={3}>
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>Size:</Typography>
+      <Typography variant="body2" color="text.secondary">{size}</Typography>
+    </Box>
+  </Grid>
+
+  <Grid item xs={12} sm={6} md={3}>
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>Beds:</Typography>
+      <Typography variant="body2" color="text.secondary">{beds}</Typography>
+    </Box>
+  </Grid>
+
+  <Grid item xs={12} sm={6} md={3}>
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>Capacity:</Typography>
+      <Typography variant="body2" color="text.secondary">{capacity}</Typography>
+    </Box>
+  </Grid>
+
+  <Grid item xs={12} sm={6} md={3}>
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+      <Typography variant="body1" sx={{ fontWeight: 'bold', mr: 1 }}>Price:</Typography>
+      <Typography variant="body2" color="text.secondary">{price}</Typography>
+    </Box>
+  </Grid>
+</Grid>
+
 
                 <Divider sx={{ my: 2 }} />
 
@@ -67,7 +107,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
                     {amenities.map((amenity, index) => (
                         <Grid item key={index}>
                             <Chip
-                                icon={amenity === 'Wi-Fi' ? <Wifi /> : amenity === 'Kitchen' ? <Kitchen /> : amenity === 'Private Bathroom' ? <Bathtub /> : <DirectionsCar />}
+                                icon={getAmenityIcon(amenity)}
                                 label={amenity}
                                 color="primary"
                                 variant="outlined"
@@ -80,13 +120,27 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
                 <Divider sx={{ my: 2 }} />
 
                 {/* Booking CTA */}
-                {onBook && (
+          
                     <Box mt={4} textAlign="center">
-                        <Button variant="contained" color="primary" size="large" startIcon={<CheckCircleOutline />} onClick={onBook}>
-                            Book Now
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            size="large" 
+                            startIcon={<CheckCircleOutline />} 
+                       
+                            sx={{
+                                backgroundColor: '#007BFF', // Customize button color
+                                '&:hover': {
+                                    backgroundColor: '#0056b3', // Darker on hover
+                                },
+                                padding: '10px 20px',
+                                fontSize: '1rem',
+                            }}
+                        >
+                            Book Room
                         </Button>
                     </Box>
-                )}
+                
             </Box>
         </Box>
     );
