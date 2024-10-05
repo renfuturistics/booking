@@ -126,6 +126,7 @@ const RoomDetails: React.FC<RoomDetailsProps> = ({
                             variant="contained" 
                             color="primary" 
                             size="large" 
+                            onClick={onBook}
                             startIcon={<CheckCircleOutline />} 
                        
                             sx={{

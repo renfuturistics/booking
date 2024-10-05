@@ -1,15 +1,25 @@
 // pages/LoginPage.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, TextField, Button, Box, Typography, Paper, Link } from '@mui/material';
 import Head from 'next/head';
 import NextLink from 'next/link';
+import { userLogin } from '@/state/authActions';
+import { reset, RootState } from '@/state/authSlice';
+import { AppDispatch } from '@/state/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+    const navigate = useRouter();
 
+    const dispatch = useDispatch<AppDispatch>();
+    const { userInfo, error, loading } = useSelector(
+      (state: RootState) => state.auth
+    );
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -17,11 +27,25 @@ const LoginPage = () => {
             [name]: value,
         }));
     };
-
+    useEffect(() => {
+        if (userInfo) {
+          navigate.push("/");
+        }
+      }, [navigate, userInfo, error]);
+    
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Handle form submission
-        console.log('Form submitted', formData);
+   
+        if (formData) {
+          const info = {
+            email: formData.email.toString().toLowerCase(),
+            password: formData.password.toString().toLowerCase(),
+          };
+    
+          dispatch(reset());
+          dispatch(userLogin(info));
+        }
     };
 
     return (

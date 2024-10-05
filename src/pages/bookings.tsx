@@ -1,77 +1,154 @@
-// pages/BookedRoomsPage.tsx
-import React, { useEffect, useState } from 'react';
-import { Box, Container, Grid, Typography, CircularProgress } from '@mui/material';
-import Head from 'next/head';
-import RoomCard from '@/components/RoomCard'; // Assuming you have a RoomCard component
-import { Room } from '@/data/rooms';
-import axios from 'axios';
-const BookedRoomsPage = () => {
-    const [bookedRooms, setBookedRooms] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    useEffect(() => {
-        // Fetch booked rooms from your backend or service
-        const fetchBookedRooms = async () => {
-            try {
-                const { data } = await axios(`${process.env.NEXT_PUBLIC_BASE_URL}api/bookings/user/666d0a0397db2de6a6f78acb`); // Adjust the endpoint as needed
-                if (!data.success) throw new Error(data.error)
+// pages/bookings/[id].tsx
 
-                setBookedRooms(data.bookings);
-            } catch (error) {
-                console.error('Error fetching booked rooms:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import {
+  Box,
+  Container,
+  Typography,
+  CircularProgress,
+  Grid,
+  Paper,
+} from "@mui/material";
+import axios from "@/utils/axios";
 
-        fetchBookedRooms();
-    }, []);
+interface Booking {
+  id: string;
+  room: {
+    imageUrl: string;
+    title: string;
+    description: string;
+    size: string;
+    beds: number;
+    capacity: number;
+    price: string;
+    amenities: string[];
+  };
+  bookingDate: string;
+  stayDuration: string;
+  totalPrice: string;
+}
 
-    if (error) {
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <Typography variant="h6" color="error">
-                    {error}
-                </Typography>
-            </Box>
+const BookingDetailsPage = () => {
+  const router = useRouter();
+
+  const [booking, setBooking] = useState<Booking | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBookingDetails = async () => {
+      try {
+        const { data } = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings/user`
         );
-    }
+        if (!data.success) throw new Error();
+
+        setBooking(data.booking);
+      } catch (err) {
+        console.log(err);
+        setError("Failed to load booking details. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookingDetails();
+  }, []);
+
+  if (loading) {
     return (
-        <>
-            <Head>
-                <title>My Booked Rooms</title>
-            </Head>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Typography variant="h3" component="h1" gutterBottom>
-                    My Booked Rooms
-                </Typography>
-                {loading ? (
-                    <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <Grid container spacing={4}>
-                        {bookedRooms.map((room, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index}>
-                                <RoomCard
-                                    imageUrl={room.room.imageUrl}
-                                    title={room.room.title}
-                                    description={room.room.description}
-                                    size={room.room.size}
-                                    slug=''
-                                    id={room._id}
-                                    beds={room.room.beds}
-                                    capacity={room.room.capacity}
-                                    price={room.room.price}
-                                    onBook={undefined} // No booking function needed
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                )}
-            </Container>
-        </>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="80vh"
+      >
+        <CircularProgress />
+      </Box>
     );
+  }
+
+  if (error) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="80vh"
+      >
+        <Typography color="error" variant="h6">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (!booking) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="80vh"
+      >
+        <Typography variant="h6">Booking not found</Typography>
+      </Box>
+    );
+  }
+
+  const { room, bookingDate, stayDuration, totalPrice } = booking;
+
+  return (
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Booking Details
+      </Typography>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={6}>
+          <img
+            src={room.imageUrl}
+            alt={room.title}
+            style={{
+              width: "100%",
+              height: "auto",
+              borderRadius: "8px",
+              objectFit: "cover",
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 4, borderRadius: "12px" }}>
+            <Typography variant="h5" gutterBottom>
+              {room.title}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" gutterBottom>
+              {room.description}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Size: {room.size}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Beds: {room.beds}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Capacity: {room.capacity}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Booking Date: {new Date(bookingDate).toLocaleDateString()}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Stay Duration: {stayDuration}
+            </Typography>
+            <Typography variant="h6" sx={{ mt: 2 }}>
+              Total Price: {totalPrice}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
+  );
 };
 
-export default BookedRoomsPage;
+export default BookingDetailsPage;

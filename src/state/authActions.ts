@@ -1,5 +1,5 @@
 // authActions.js
-import axiosInstance from "axios";
+import axiosInstance from "@/utils/axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getAccessToken, RootState } from "./authSlice";
@@ -25,6 +25,7 @@ export const registerUser = createAsyncThunk(
 
             return "success";
         } catch (error: any) {
+            console.log(error)
             // return custom error message from backend if present
 
             if (error.response && error.response.data) {
@@ -60,7 +61,7 @@ export const userLogin = createAsyncThunk(
             return { token, user, data };
         } catch (error: any) {
             // return custom error message from API if any
-
+            console.log(error)
             if (error.response && error.response.data) {
                 return rejectWithValue(error.response.data.message);
             } else {

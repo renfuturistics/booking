@@ -27,13 +27,18 @@
     "next-redux-wrapper": "^8.1.0",
     "react-redux": "^8.0.5",
     "@mui/icons-material": "^5.11.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "axios-auth-refresh": "^3.3.6",
+    "cookie": "^0.5.0",
+    "set-cookie-parser": "^2.4.7"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
+    "@types/cookie": "^0.5.1",
+    "@types/set-cookie-parser": "^2.4.0",
     "eslint-config-next": "14.2.4",
     "typescript": "^5"
   }
